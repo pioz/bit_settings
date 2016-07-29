@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{BitSettings is a plugin for ActiveRecord that transform a column of your model in a set of boolean settings.}
   spec.description   = %q{BitSettings is a plugin for ActiveRecord that transform a column of your model in a set of boolean settings.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.homepage      = "https://github.com/pioz/bit_settings"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
