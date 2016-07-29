@@ -6,7 +6,7 @@ module BitSettings
     base.extend(self)
   end
 
-  def add_settings(settings: [], column: :settings, prefix: nil)
+  def add_settings(settings:, column: :settings, prefix: nil)
     prefix = prefix ? "#{prefix}_" : ''
     if settings.size > 32
       raise 'You can NOT have more than 32 settings (max unsigned int with 4 bytes is 2^32-1)'
