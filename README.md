@@ -1,6 +1,7 @@
 # BitSettings
 
 BitSettings is a plugin for ActiveRecord that transform a column of your model in a set of boolean settings.
+You can have up to 32 boolean values stored in a single database column.
 
 ## Installation
 
