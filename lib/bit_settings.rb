@@ -17,7 +17,7 @@ module BitSettings
         end
         alias_method "#{prefix}#{setting}?", "#{prefix}#{setting}"
         define_method "#{prefix}#{setting}=" do |value|
-          if ActiveRecord::ConnectionAdapters::Column::TRUE_VALUES.include?(value)
+          if ActiveModel::Type::Boolean.new.cast(value)
             self.send("#{column}=", self.send(column) | (1 << i))
           else
             self.send("#{column}=", self.send(column) & ~(1 << i))
