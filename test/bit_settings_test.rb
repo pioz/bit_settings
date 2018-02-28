@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class BitSettingsTest < Minitest::Test
+class BitSettingsTest < Minitest::Test#Minitest::Unit::TestCase
 
   def setup
     User.delete_all

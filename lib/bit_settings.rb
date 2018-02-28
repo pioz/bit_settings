@@ -1,4 +1,5 @@
 require 'bit_settings/version'
+require 'bit_settings/boolean_value'
 
 module BitSettings
   extend ActiveSupport::Concern
@@ -33,6 +34,8 @@ module BitSettings
         self.bit_settings ||= {}
         self.bit_settings[column] = settings.map{|x| "#{prefix}#{x}".to_sym}
 
+        cast_to_boolean = BooleanValue.cast_to_boolean_func
+
         settings.each_with_index do |setting, i|
           define_method "#{prefix}#{setting}" do
             self.send(column) & (1 << i) > 0
@@ -40,7 +43,7 @@ module BitSettings
           alias_method "#{prefix}#{setting}?", "#{prefix}#{setting}"
           
           define_method "#{prefix}#{setting}=" do |value|
-            if ActiveModel::Type::Boolean.new.cast(value)
+            if cast_to_boolean.call(value)
               self.send("#{column}=", self.send(column) | (1 << i))
             else
               self.send("#{column}=", self.send(column) & ~(1 << i))
