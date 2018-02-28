@@ -39,7 +39,7 @@ Then in your model:
 ```
 class User extends ActiveRecord::Base
   include BitSettings
-  add_settings settings: [:disable_notifications, :help_tour_shown]
+  add_settings :disable_notifications, :help_tour_shown
 end
 ```
 
@@ -52,11 +52,19 @@ user.disable_notifications = true # => true
 user.save
 ```
 
-Other options are `:column` and `:prefix`:
+You can also use the scope `with_settings` which takes a hash as parameter like the example below:
+
+```
+# Get all users with the value of setting disable_notifications equal to true
+# and the settings help_tour_shown equal to false.
+users = User.with_settings(disable_notifications: true, help_tour_shown: false)
+```
+
+Available options are `:column` and `:prefix`:
 
 ```
 class User extends ActiveRecord::Base
-  add_settings settings: [:disable_notifications, :help_tour_shown], column: :my_settings, prefix: :setting
+  add_settings :disable_notifications, :help_tour_shown, column: :my_settings, prefix: :setting
 end
 ```
 * `:column` specify the name of the column to use (default is `settings`)
@@ -64,6 +72,7 @@ end
 
 ```
 user.setting_disable_notifications? # => false
+users = User.with_settings(setting_disable_notifications: false)
 ```
 
 ## Development

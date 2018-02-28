@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "bit_settings"
   spec.version       = BitSettings::VERSION
   spec.authors       = ["pioz"]
-  spec.email         = ["enrico@megiston.it"]
+  spec.email         = ["epilotto@gmx.com"]
 
   spec.summary       = %q{BitSettings is a plugin for ActiveRecord that transform a column of your model in a set of boolean settings.}
   spec.description   = %q{BitSettings is a plugin for ActiveRecord that transform a column of your model in a set of boolean settings.}
@@ -19,8 +19,12 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_development_dependency "bundler", "~> 1.12"
-  spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "bundler", "~> 1.16"
+  spec.add_development_dependency "rake", "~> 12.3"
+  spec.add_development_dependency "activerecord", ">= 5.0.0"
+  spec.add_development_dependency "sqlite3", "~> 1.3"
+  spec.add_development_dependency "minitest", "~> 5.11"
 
   spec.add_dependency "activemodel", ">= 5.0.0"
+  spec.add_dependency "activesupport", ">= 5.0.0"
 end

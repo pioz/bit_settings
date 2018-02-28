@@ -1,30 +1,56 @@
 require 'bit_settings/version'
 
 module BitSettings
+  extend ActiveSupport::Concern
+  
+  included do
+    class_attribute :bit_settings
 
-  def self.included(base)
-    base.extend(self)
+    scope :with_settings, -> (h) do
+      available = self.bit_settings.values.flatten
+      invalid = h.keys - available
+      raise "Settings #{invalid.inspect} do not exist for #{self} model: available settings are #{available.inspect}" if invalid.any?
+      scope = current_scope
+      self.bit_settings.each do |column, settings|
+        true_mask  = h.select{|k, v| settings.include?(k) &&  v}.keys.reduce(0) {|memo, x| memo | (1 << settings.index(x))}
+        false_mask = h.select{|k, v| settings.include?(k) && !v}.keys.reduce(0) {|memo, x| memo | (1 << settings.index(x))}
+        scope = scope.where("#{table_name}.#{column} & #{true_mask} = #{true_mask}") if  true_mask > 0
+        scope = scope.where("#{table_name}.#{column} & #{false_mask} = 0") if false_mask > 0
+      end
+      return scope
+    end
+
   end
 
-  def add_settings(settings:, column: :settings, prefix: nil)
-    prefix = prefix ? "#{prefix}_" : ''
-    if settings.size > 32
-      raise 'You can NOT have more than 32 settings (max unsigned int with 4 bytes is 2^32-1)'
-    else
-      settings.each_with_index do |setting, i|
-        define_method "#{prefix}#{setting}" do
-          self.send(column) & (1 << i) > 0
-        end
-        alias_method "#{prefix}#{setting}?", "#{prefix}#{setting}"
-        define_method "#{prefix}#{setting}=" do |value|
-          if ActiveModel::Type::Boolean.new.cast(value)
-            self.send("#{column}=", self.send(column) | (1 << i))
-          else
-            self.send("#{column}=", self.send(column) & ~(1 << i))
+  module ClassMethods
+
+    def add_settings(*settings, column: :settings, prefix: nil)
+      prefix = prefix ? "#{prefix}_" : ''
+      if settings.size > 32
+        raise 'You can NOT have more than 32 settings (max unsigned int with 4 bytes is 2^32-1)'
+      else
+
+        self.bit_settings ||= {}
+        self.bit_settings[column] = settings.map{|x| "#{prefix}#{x}".to_sym}
+
+        settings.each_with_index do |setting, i|
+          define_method "#{prefix}#{setting}" do
+            self.send(column) & (1 << i) > 0
+          end
+          alias_method "#{prefix}#{setting}?", "#{prefix}#{setting}"
+          
+          define_method "#{prefix}#{setting}=" do |value|
+            if ActiveModel::Type::Boolean.new.cast(value)
+              self.send("#{column}=", self.send(column) | (1 << i))
+            else
+              self.send("#{column}=", self.send(column) & ~(1 << i))
+            end
           end
         end
+
       end
     end
+
   end
 
 end
