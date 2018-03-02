@@ -7,7 +7,7 @@ module BitSettings
   included do
     class_attribute :bit_settings
 
-    scope :with_settings, -> (h) do
+    scope :with_settings, lambda { |h|
       available = self.bit_settings.values.flatten
       invalid = h.keys - available
       raise "Settings #{invalid.inspect} do not exist for #{self} model: available settings are #{available.inspect}" if invalid.any?
@@ -19,7 +19,7 @@ module BitSettings
         scope = scope.where("#{table_name}.#{column} & #{false_mask} = 0") if false_mask > 0
       end
       return scope
-    end
+    }
 
   end
 
