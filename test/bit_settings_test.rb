@@ -1,7 +1,6 @@
 require 'test_helper'
 
-class BitSettingsTest < Minitest::Test#Minitest::Unit::TestCase
-
+class BitSettingsTest < Minitest::Test
   def setup
     User.delete_all
   end
@@ -47,8 +46,8 @@ class BitSettingsTest < Minitest::Test#Minitest::Unit::TestCase
     assert_equal [u3, u5, u6], res.to_a
 
     res = User.with_settings(help_tour_shown: false)
-    assert_equal [u1, u2, u4], res.to_a    
-    
+    assert_equal [u1, u2, u4], res.to_a
+
     res = User.with_settings(disable_notifications: false, help_tour_shown: false)
     assert_equal [u1], res.to_a
 
@@ -73,5 +72,4 @@ class BitSettingsTest < Minitest::Test#Minitest::Unit::TestCase
       User.with_settings(invalid: true)
     end
   end
-
 end

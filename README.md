@@ -23,7 +23,6 @@ Or install it yourself as:
 
 First of all add a unsigned int column for your boolean settings with `rails g migration add_settings_to_users settings:integer` and then edit like follow:
 
-
 ```
 class AddSettingsToUsers < ActiveRecord::Migration
   def change
@@ -31,6 +30,7 @@ class AddSettingsToUsers < ActiveRecord::Migration
   end
 end
 ```
+
 The max unsigned integer in 4 bytes is `2^32-1 = 4294967295` so with a column you can have max 32 settings.
 If you want that the default value of your settings is 1 (true) set the default value of the column to `2^32-1`.
 
@@ -67,8 +67,9 @@ class User extends ActiveRecord::Base
   add_settings :disable_notifications, :help_tour_shown, column: :my_settings, prefix: :setting
 end
 ```
-* `:column` specify the name of the column to use (default is `settings`)
-* `:prefix` add a prefix to dynamic methods
+
+- `:column` specify the name of the column to use (default is `settings`)
+- `:prefix` add a prefix to dynamic methods
 
 ```
 user.setting_disable_notifications? # => false
@@ -84,7 +85,6 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/pioz/bit_settings.
-
 
 ## License
 

@@ -9,7 +9,7 @@ ActiveRecord::Schema.define do
   create_table(:users) do |t|
     t.string :username
     t.column :settings, 'INT UNSIGNED', null: false, default: 0
-    t.column :conf,     'INT UNSIGNED', null: false, default: 2**31-1
+    t.column :conf,     'INT UNSIGNED', null: false, default: 2**31 - 1
   end
 end
 
